@@ -389,6 +389,8 @@ def color_pick(sur):
         filledcube = False
         filledcircle = False
         saving = True
+        savename()
+        time.sleep(2)
         save()
         lx.clear()
         ly.clear()
@@ -660,7 +662,7 @@ def filledCircle(event):
             else:
                 pass
 
-
+bdg = False
     
 def decider(event):
     #t1 = threading.Thread(target=motion(event))
@@ -671,8 +673,11 @@ def decider(event):
     global cubidubidu
     global filledcube
     global filledcircle
+    global bdg
     x = event.x
     y = event.y
+    if bdg ==True:
+        late_grab()
     
     if lineGoGOGO == True:
         line(event)
@@ -686,6 +691,7 @@ def decider(event):
         filledCube(event)
     elif filledcircle == True:
         filledCircle(event)
+
     '''elif saving == True:
         save()'''
 
@@ -714,10 +720,18 @@ def show_entry_fields():
     global e1
     global filename
     global master
+    global win
+    global antibug
+    global bdg
     print(e1.get())
     filename = e1.get()
     time.sleep(0.3)
     master.destroy()
+    antibug = True
+    canvas.itemconfig('draw', width=3)
+    canvas.itemconfig('save', width=1)
+    bdg = True
+    
 
 def caller(event):
     show_entry_fields()
@@ -727,6 +741,7 @@ def savename():
     global saving
     global e1
     global master
+    global antibug
     master = tkinter.Tk()
     master.title('Save as')
     master.geometry('250x100')
@@ -740,21 +755,37 @@ def savename():
                                                          sticky=tkinter.W, 
                                                          pady=4)
     master.bind('<Return>', caller)
-    saving == False
+    saving = False
+    
+    
     master.mainloop()
 def save():
     global screensize
     global filename
     global saving
-    savename()
+    global win
+    global bdg
+    #savename()
     x=370
     y=40
     x1=screensize[0]
     y1=screensize[1]
+    #win.focus()
+    #ImageGrab.grab( include_layered_windows=False).crop((x,y,x1,y1)).save(str(filename)+'.jpg')
+    saving = False
+    
+
+def late_grab():
+    global screensize
+    global filename
+    global bdg
+    x=370
+    y=40
+    x1=screensize[0]
+    y1=screensize[1]
+    win.focus()
     ImageGrab.grab( include_layered_windows=False).crop((x,y,x1,y1)).save(str(filename)+'.jpg')
-    saving == False
-
-
+    bdg = False
 
 canvas.bind_all('<B1-Motion>', motion)
 #canvas.bind_all('<B3-Motion>', motion)
