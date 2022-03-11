@@ -426,7 +426,7 @@ def color_pick(sur):
         canvas.itemconfig('save', width=1)
 dx = []
 dy = []
-'working?'
+
 def draw(x,y):
     global selected_color
     global width_selected
