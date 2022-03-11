@@ -228,7 +228,6 @@ def color_pick(sur):
         failsafe = False
         curr_bg_color = selected_color
     elif screensize[0]-30<x<screensize[0]-10 and 10<y<30:
-        #screensize[0]-30, 10, screensize[0]-10, 30
         canvas.itemconfig('exit', fill = 'maroon')
         canvas.update()
         time.sleep(0.17)
@@ -390,7 +389,6 @@ def color_pick(sur):
         filledcircle = False
         saving = True
         savename()
-        time.sleep(2)
         save()
         lx.clear()
         ly.clear()
@@ -408,14 +406,10 @@ def draw(x,y):
     global dy
     global curr_bg_color
     global failsafe
-    width_adjusted = width_selected /2
-    #canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
-    
+    width_adjusted = width_selected /2    
     dx.append(x)
     dy.append(y)
     print(len(dx))
-    #if mouse.is_pressed(button='left') == True:
-
     if 370>= x and 130 >= y:
         failsafe = False
     
@@ -435,14 +429,13 @@ def draw(x,y):
                 dy.pop(d)
                 d+=1
         try:
-        
-            #canvas.create_line(dx[-5],dy[-5],dx[-4],dy[-4],fill = selected_color,width =width_selected, tags='line')
-            #canvas.create_line(dx[-4],dy[-4],dx[-3],dy[-3],fill = selected_color,width =width_selected, tags='line')
-            #canvas.create_line(dx[-3],dy[-3],dx[-2],dy[-2],fill = selected_color,width =width_selected, tags='line')
             canvas.create_line(dx[-2],dy[-2],dx[-1],dy[-1],fill = selected_color,width =width_selected, tags='line')
             canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
         except IndexError:
-            canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
+            if y <= 40:
+                pass
+            else:
+                canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
         if len(dx) > 20:
             nono = len(dx) - 2
             del dx[0:nono]
@@ -459,7 +452,6 @@ def motion(event):
     x = event.x
     y = event.y
     print(str(x)+ ' ' +str(y))
-    #if mouse.is_pressed(button='left') == True:
     if antibug == True:
         if failsafe == True:
             
@@ -665,8 +657,6 @@ def filledCircle(event):
 bdg = False
     
 def decider(event):
-    #t1 = threading.Thread(target=motion(event))
-    #t1.start()
     global lineGoGOGO
     global canYoubro
     global antibug
@@ -691,9 +681,6 @@ def decider(event):
         filledCube(event)
     elif filledcircle == True:
         filledCircle(event)
-
-    '''elif saving == True:
-        save()'''
 
     color_pick(event)
     if x<370 or y < 40:
@@ -760,18 +747,7 @@ def savename():
     
     master.mainloop()
 def save():
-    global screensize
-    global filename
     global saving
-    global win
-    global bdg
-    #savename()
-    x=370
-    y=40
-    x1=screensize[0]
-    y1=screensize[1]
-    #win.focus()
-    #ImageGrab.grab( include_layered_windows=False).crop((x,y,x1,y1)).save(str(filename)+'.jpg')
     saving = False
     
 
@@ -788,14 +764,6 @@ def late_grab():
     bdg = False
 
 canvas.bind_all('<B1-Motion>', motion)
-#canvas.bind_all('<B3-Motion>', motion)
-'''canvas.bind_all('<Motion>', motion)
-canvas.bind_all('<Motion>', motion)'''
-'''t1 = threading.Thread(target=motion)
-t1.start()'''
-#canvas.bind_all("<Button-1>", color_pick)
-#canvas.bind_all("<Button-2>", color_pick)
 canvas.bind_all("<Button-1>", decider)
-#canvas.bind_all("<Button-2>", line)
 canvas.bind_all("<ButtonRelease-1>",setter)
 win.mainloop()
