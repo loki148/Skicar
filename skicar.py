@@ -11,7 +11,8 @@ canvas.pack(fill = tkinter.BOTH, expand=True)
 win.attributes('-fullscreen',True)
 color= ['white','silver','grey','yellow','gold','#CC7722','orange','pink','magenta', 'red','crimson', 'purple','navy blue', 'dark blue', 'blue','teal', 'cyan', 'turquoise', 'green', 'dark green' , 'brown', 'black']
 width = [4,12,16,20,28,36,42,50,60,70,80,100]
-
+listforbeckwards = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t','q','u','v','w','x','y','z','aa','ba','ca','da','ea','fa','ga','ha','ia','ja','ka','la','ma','na','oa','pa','ra','sa','ta','qa','ua','va','wa','xa','ya','za','ab','bb','cb','db','eb','fb','gb','hb','ib','jb','kb','lb','mb','nb','ob','pb','rb','sb','tb','qb','ub','vb','wb','xb','yb','zb','ad','bd','cd','dd','ed','fd','gd','hd','id','jd','kd','ld','md','nd','od','pd','rd','sd','td','qd','ud','vd','wd','xd','yd','zd','aad','bad','cad','dad','ead','fad','gad','had','iad','jad','kad','lad','mad','nad','oad','pad','rad','sad','tad','qad','uad','vad','wad','xad','yad','zad','abd','bbd','cbd','dbd','ebd','fbd','gbd','hbd','ibd','jbd','kbd','lbd','mbd','nbd','obd','pbd','rbd','sbd','tbd','qbd','ubd','vbd','wbd','xbd','ybd','zbd','ae','be','ce','de','ee','fe','ge','he','ie','je','ke','le','me','ne','oe','pe','re','se','te','qe','ue','ve','we','xe','ye','ze','aea','bae','cae','dae','eae','fae','gae','hae','iae','jae','kae','lae','mae','nae','oae','pae','rae','sae','tae','qae','uae','vae','wae','xae','yae','zae','abe','bbe','cbe','dbe','ebe','fbe','gbe','hbe','ibe','jbe','kbe','lbe','mbe','nbe','obe','pbe','rbe','sbe','tbe','qbe','ube','vbe','wbe','xbe','ybe','zbe','ade','bde','cde','dde','ede','fdee','gde','hde','ide','jde','kde','lde','mde','nde','ode','pde','rde','sde','tde','qde','ude','vde','wde','xde','yde','zde','aade','bade','cade','dade','eade','fade','gade','hade','iade','jade','kade','lade','made','nade','oade','pade','rade','sade','tade','qade','uade','vade','wade','xade','yade','zade','abde','bbde','cbde','dbde','ebde','fbde','gbde','hbde','ibde','jbde','kbde','lbde','mbde','nbde','obde','pbde','rbde','sbde','tbde','qbde','ubde','vbde','wbde','xbde','ybde','zbde',]
+print('lenoflist'+str(len(listforbeckwards)))
 user32 = ctypes.windll.user32
 screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 print(screensize)
@@ -64,7 +65,13 @@ canvas.create_rectangle(160, 100, 180, 120, fill='silver', tags=('circlefilled',
 canvas.create_text(170 ,110 , text ='●' ,tags=('circlefilled','tool'))
 
 canvas.create_rectangle(190, 100, 210, 120, fill='silver', tags=('save','tool'))
-canvas.create_text(200 ,110 , text ='S' ,tags=('save','tool'))
+canvas.create_text(200 ,110 , text ='💾',font='arial 12',tags= ('save','tool'))
+
+canvas.create_rectangle(230, 100, 280, 150, fill='silver', tags=('backarrow','tool'))
+canvas.create_text(255 ,125 , text ='⤺',font='arial 40',tags= ('backarrow','tool'))
+
+#canvas.create_rectangle(250, 100, 270, 120, fill='silver', tags=('backarrow','tool'))
+#canvas.create_text(260 ,110 , text ='',font='arial 12',tags= ('backarrow','tool'))
 
 canvas.itemconfig('w'+str(width[2]), width=3)
 canvas.itemconfig(str(color[21]), width=3)
@@ -99,6 +106,8 @@ def color_pick(sur):
     global filledcube
     global filledcircle
     global saving
+    global tagofdrawnitems
+    global listforbeckwards
     failsafe = False
     saving == False
     if 10<x<30 and 10<y<30:
@@ -215,6 +224,7 @@ def color_pick(sur):
     elif 340<x<360 and 10<y<30:
         canvas.delete('line')
         canvas.itemconfig('backspace', fill = 'red')
+        tagofdrawnitems = 0
         canvas.update()
         time.sleep(0.17)
         canvas.itemconfig('backspace', fill = 'silver')
@@ -392,6 +402,17 @@ def color_pick(sur):
         save()
         lx.clear()
         ly.clear()
+    elif 230<x<280 and 100<y<150:
+        canvas.itemconfig('backarrow', width=3 )
+        canvas.delete('a'+listforbeckwards[tagofdrawnitems])
+        canvas.update()
+        time.sleep(0.5)
+        canvas.itemconfig('backarrow', width=1 )
+        if antibug == True:
+            tagofdrawnitems -= 1
+        else:
+            tagofdrawnitems -= 2
+        #deletelaststep()
     else:
         failsafe = True
         
@@ -406,7 +427,9 @@ def draw(x,y):
     global dy
     global curr_bg_color
     global failsafe
-    width_adjusted = width_selected /2    
+    global tagofdrawnitems
+    width_adjusted = width_selected /2 
+    global listforbeckwards 
     dx.append(x)
     dy.append(y)
     print(len(dx))
@@ -429,13 +452,13 @@ def draw(x,y):
                 dy.pop(d)
                 d+=1
         try:
-            canvas.create_line(dx[-2],dy[-2],dx[-1],dy[-1],fill = selected_color,width =width_selected, tags='line')
-            canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
+            canvas.create_line(dx[-2],dy[-2],dx[-1],dy[-1],fill = selected_color,width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+            canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f), 'a'+listforbeckwards[tagofdrawnitems]))
         except IndexError:
             if y <= 40:
                 pass
             else:
-                canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f)))
+                canvas.create_oval(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted,fill= selected_color, outline= selected_color, tags=('line','line'+str(f), 'a'+listforbeckwards[tagofdrawnitems]))
         if len(dx) > 20:
             nono = len(dx) - 2
             del dx[0:nono]
@@ -446,12 +469,13 @@ event = 0
 
 f = 0
 def motion(event):
+    global tagofdrawnitems
     global f
     global antibug
     global failsafe
     x = event.x
     y = event.y
-    print(str(x)+ ' ' +str(y))
+    #print(str(x)+ ' ' +str(y))
     if antibug == True:
         if failsafe == True:
             
@@ -473,6 +497,8 @@ def circle(event):
     global width_selected
     global hm
     global canYoubro
+    global tagofdrawnitems
+    global listforbeckwards
     x =event.x
     y = event.y
     lx.append(x)
@@ -496,7 +522,7 @@ def circle(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags='line')
+                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
                 lx.clear()
                 ly.clear()
             else:
@@ -513,6 +539,8 @@ def line(event):
     global width_selected
     global hm
     global lineGoGOGO
+    global tagofdrawnitems
+    global listforbeckwards
     x =event.x
     y = event.y
     lx.append(x)
@@ -536,7 +564,7 @@ def line(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_line(lx[0],ly[0],lx[1],ly[1],fill=selected_color,width =width_selected, tags='line')
+                canvas.create_line(lx[0],ly[0],lx[1],ly[1],fill=selected_color,width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
                 lx.clear()
                 ly.clear()
             else:
@@ -550,6 +578,8 @@ def cube(event):
     global width_selected
     global hm
     global cubidubidu
+    global tagofdrawnitems
+    global listforbeckwards
     x =event.x
     y = event.y
     lx.append(x)
@@ -573,7 +603,7 @@ def cube(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags='line')
+                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
                 lx.clear()
                 ly.clear()
             else:
@@ -588,6 +618,8 @@ def filledCube(event):
     global width_selected
     global hm
     global filledcube
+    global tagofdrawnitems
+    global listforbeckwards
     x =event.x
     y = event.y
     lx.append(x)
@@ -611,13 +643,14 @@ def filledCube(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags='line')
+                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
                 lx.clear()
                 ly.clear()
             else:
                 pass
             
 def filledCircle(event):
+    global tagofdrawnitems
     global lx
     global ly
     global curr_bg_color
@@ -625,6 +658,7 @@ def filledCircle(event):
     global width_selected
     global hm
     global filledcircle
+    global listforbeckwards
     x =event.x
     y = event.y
     lx.append(x)
@@ -648,14 +682,15 @@ def filledCircle(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags='line')
+                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
                 lx.clear()
                 ly.clear()
             else:
                 pass
 
 bdg = False
-    
+tagofdrawnitems = 0
+
 def decider(event):
     global lineGoGOGO
     global canYoubro
@@ -664,8 +699,13 @@ def decider(event):
     global filledcube
     global filledcircle
     global bdg
+    global tagofdrawnitems
     x = event.x
     y = event.y
+    if x >= 370:
+        if tagofdrawnitems >= 312:
+            tagofdrawnitems = 0
+        tagofdrawnitems += 1
     if bdg ==True:
         late_grab()
     
@@ -699,8 +739,13 @@ def drawcall(event):
 def setter(event):
     global lx
     global ly
+    global tagofdrawnitems
+    global listforbeckwards
     dx.clear()
     dy.clear()
+    #tagofdrawnitems += 1
+    print(str(tagofdrawnitems) +''+listforbeckwards[tagofdrawnitems])
+    print('''^\n|||||||||''')
 
 def show_entry_fields():
     print('well i got further')
@@ -750,7 +795,6 @@ def save():
     global saving
     saving = False
     
-
 def late_grab():
     global screensize
     global filename
