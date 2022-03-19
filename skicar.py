@@ -1,4 +1,4 @@
-import tkinter, mouse, threading, time
+import tkinter, time, threading
 import ctypes
 from PIL import ImageGrab
 win = tkinter.Tk()
@@ -72,16 +72,16 @@ canvas.create_rectangle(160, 100, 180, 120, fill='silver', tags=('circlefilled',
 canvas.create_text(170 ,110 , text ='●' ,tags=('circlefilled','tool'))
 
 canvas.create_rectangle(190, 100, 210, 120, fill='silver', tags=('save','tool'))
-canvas.create_text(200 ,110 , text ='💾',font='arial 12',tags= ('save','tool'))
+canvas.create_text(200 ,110 , text ='💾',font='arial 12',tags= ('savesym','tool'))
 
 canvas.create_rectangle(230, 100, 280, 150, fill='silver', tags=('backarrow','tool'))
 canvas.create_text(255 ,125 , text ='⤺',font='arial 40',tags= ('backarrow','tool'))
 
-#canvas.create_rectangle(250, 100, 270, 120, fill='silver', tags=('backarrow','tool'))
+#canvas.create_rectangle(290, 100, 340, 150, fill='silver', tags=('backarrow','tool'))
 #canvas.create_text(260 ,110 , text ='',font='arial 12',tags= ('backarrow','tool'))
 
 canvas.itemconfig('w'+str(width[2]), width=3)
-canvas.itemconfig(str(color[21]), width=3)
+canvas.itemconfig(str(color[21]), outline='white', width=3)
 
 width_selected = 16
 selected_color= 'black'
@@ -225,7 +225,7 @@ def color_pick(sur):
     elif 310<x<330 and 40<y<60:
         canvas.itemconfig('colors', width=1 )
         selected_color = color[21]
-        canvas.itemconfig(str(color[21]), width=3)
+        canvas.itemconfig(str(color[21]),outline='white', width=3)
         failsafe = False
         
     elif 340<x<360 and 10<y<30:
@@ -394,7 +394,7 @@ def color_pick(sur):
         190, 100, 210, 120
     elif 190<x<210 and 100<y<120:
         canvas.itemconfig('tool', width=1 )
-        canvas.itemconfig('save', width=3)
+        canvas.itemconfig('save',fill='blue', width=3)
         canvas.update()
         time.sleep(0.17)
         antibug = False
@@ -409,21 +409,24 @@ def color_pick(sur):
         save()
         lx.clear()
         ly.clear()
+        canvas.itemconfig('save',fill='silver', width=1)
+        canvas.update()
     elif 230<x<280 and 100<y<150:
         canvas.itemconfig('backarrow', width=3 )
         canvas.delete('a'+listforbeckwards[tagofdrawnitems])
         canvas.update()
-        time.sleep(0.5)
+        time.sleep(0.1)
         canvas.itemconfig('backarrow', width=1 )
         if antibug == True:
             tagofdrawnitems -= 1
         else:
             tagofdrawnitems -= 2
-        #deletelaststep()
+
     else:
         failsafe = True
-        
-        canvas.itemconfig('save', width=1)
+        canvas.itemconfig('save',fill='silver', width=1)
+
+
 dx = []
 dy = []
 
@@ -440,7 +443,9 @@ def draw(x,y):
     dx.append(x)
     dy.append(y)
     print(len(dx))
-    if 370>= x and 130 >= y:
+    if len(canvas.find_overlapping(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted)) >= 700:
+        canvas.delete(canvas.find_overlapping(x-width_adjusted,y-width_adjusted,x+width_adjusted,y+width_adjusted)[40])
+    if 360>= x and 130 >= y:
         failsafe = False
     
     d = 0
@@ -710,7 +715,7 @@ def decider(event):
     x = event.x
     y = event.y
     if x >= 370:
-        if tagofdrawnitems >= 312:
+        if tagofdrawnitems >= 97344:
             tagofdrawnitems = 0
         tagofdrawnitems += 1
     if bdg ==True:
@@ -768,7 +773,8 @@ def show_entry_fields():
     master.destroy()
     antibug = True
     canvas.itemconfig('draw', width=3)
-    canvas.itemconfig('save', width=1)
+    #canvas.itemconfig('save', width=1)
+    canvas.itemconfig('save',fill='silver', width=1)
     bdg = True
     
 
@@ -801,6 +807,7 @@ def savename():
 def save():
     global saving
     saving = False
+    canvas.itemconfig('save',fill='silver', width=1)
     
 def late_grab():
     global screensize
@@ -811,9 +818,11 @@ def late_grab():
     x1=screensize[0]
     y1=screensize[1]
     win.focus()
-    ImageGrab.grab( include_layered_windows=False).crop((x,y,x1,y1)).save(str(filename)+'.jpg')
+    ImageGrab.grab( include_layered_windows=False).crop((x+1,y+1,x1-2,y1-2)).save(str(filename)+'.jpg')
     bdg = False
 
+
+    
 canvas.bind_all('<B1-Motion>', motion)
 canvas.bind_all("<Button-1>", decider)
 canvas.bind_all("<ButtonRelease-1>",setter)
