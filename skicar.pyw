@@ -508,9 +508,15 @@ def circle(event):
     global selected_color
     global width_selected
     global hm
-    global canYoubro
     global tagofdrawnitems
     global listforbeckwards
+    #whatcha drawin'
+    global cubidubidu
+    global canYoubro
+    global filledcube
+    global lineGoGOGO
+    global filledcircle
+
     x =event.x
     y = event.y
     lx.append(x)
@@ -518,7 +524,7 @@ def circle(event):
     print(len(lx))
     print(str(lx[hm])+ ' '+ str(ly[hm]))
     if len(lx)<= 2:
-        if canYoubro == True:
+        if 1 == 1:
             d = 0
             for items in lx:
                 
@@ -534,7 +540,23 @@ def circle(event):
                     ly.pop(d)
                 d+=1
             if len(lx)== 2:
-                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+                if canYoubro == True:
+                    # hollow circle
+                     canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+                elif filledcube==True:
+                    #filled cube
+                    canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+                elif lineGoGOGO == True:
+                    canvas.create_line(lx[0],ly[0],lx[1],ly[1],fill=selected_color,width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+                elif cubidubidu == True:
+                    #hollow cube
+                    canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+                elif filledcircle == True:
+                    #filled circle
+                     canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
+
+
+
                 lx.clear()
                 ly.clear()
             else:
@@ -543,162 +565,7 @@ def circle(event):
 ddd = 0
 lxl = []
 lyl = []
-def line(event):
-    global lx
-    global ly
-    global curr_bg_color
-    global selected_color
-    global width_selected
-    global hm
-    global lineGoGOGO
-    global tagofdrawnitems
-    global listforbeckwards
-    x =event.x
-    y = event.y
-    lx.append(x)
-    ly.append(y)
-    print(len(lx))
-    print(str(lx[hm])+ ' '+ str(ly[hm]))
-    if len(lx)<= 2:
-        if lineGoGOGO == True:
-            d = 0
-            for items in lx:
-                
-                if items <370:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            d = 0
-            for items in ly:
-                
-                if items<40:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            if len(lx)== 2:
-                canvas.create_line(lx[0],ly[0],lx[1],ly[1],fill=selected_color,width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
-                lx.clear()
-                ly.clear()
-            else:
-                pass
 
-def cube(event):
-    global lx
-    global ly
-    global curr_bg_color
-    global selected_color
-    global width_selected
-    global hm
-    global cubidubidu
-    global tagofdrawnitems
-    global listforbeckwards
-    x =event.x
-    y = event.y
-    lx.append(x)
-    ly.append(y)
-    print(len(lx))
-    print(str(lx[hm])+ ' '+ str(ly[hm]))
-    if len(lx)<= 2:
-        if cubidubidu == True:
-            d = 0
-            for items in lx:
-                
-                if items <370:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            d = 0
-            for items in ly:
-                
-                if items<40:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            if len(lx)== 2:
-                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill='',width =width_selected, tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
-                lx.clear()
-                ly.clear()
-            else:
-                pass
-
-            
-def filledCube(event):
-    global lx
-    global ly
-    global curr_bg_color
-    global selected_color
-    global width_selected
-    global hm
-    global filledcube
-    global tagofdrawnitems
-    global listforbeckwards
-    x =event.x
-    y = event.y
-    lx.append(x)
-    ly.append(y)
-    print(len(lx))
-    print(str(lx[hm])+ ' '+ str(ly[hm]))
-    if len(lx)<= 2:
-        if filledcube == True:
-            d = 0
-            for items in lx:
-                
-                if items <370:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            d = 0
-            for items in ly:
-                
-                if items<40:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            if len(lx)== 2:
-                canvas.create_rectangle(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
-                lx.clear()
-                ly.clear()
-            else:
-                pass
-            
-def filledCircle(event):
-    global tagofdrawnitems
-    global lx
-    global ly
-    global curr_bg_color
-    global selected_color
-    global width_selected
-    global hm
-    global filledcircle
-    global listforbeckwards
-    x =event.x
-    y = event.y
-    lx.append(x)
-    ly.append(y)
-    print(len(lx))
-    print(str(lx[hm])+ ' '+ str(ly[hm]))
-    if len(lx)<= 2:
-        if filledcircle == True:
-            d = 0
-            for items in lx:
-                
-                if items <370:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            d = 0
-            for items in ly:
-                
-                if items<40:
-                    lx.pop(d)
-                    ly.pop(d)
-                d+=1
-            if len(lx)== 2:
-                canvas.create_oval(lx[0],ly[0],lx[1],ly[1],outline=selected_color,fill=selected_color,tags=('line', 'a'+listforbeckwards[tagofdrawnitems]))
-                lx.clear()
-                ly.clear()
-            else:
-                pass
 
 bdg = False
 tagofdrawnitems = 0
@@ -722,17 +589,17 @@ def decider(event):
         late_grab()
     
     if lineGoGOGO == True:
-        line(event)
+        circle(event)
     elif canYoubro == True:
         circle(event)
     elif antibug == True:
         drawcall(event)
     elif cubidubidu == True:
-        cube(event)
+       circle(event)
     elif filledcube == True:
-        filledCube(event)
+        circle(event)
     elif filledcircle == True:
-        filledCircle(event)
+       circle(event)
 
     color_pick(event)
     if x<370 or y < 40:
